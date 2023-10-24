@@ -1,38 +1,42 @@
 #include "main.h"
 
 /**
- * _prc_gt - evaluates the accuracy for printing
- * @format: string formatted
- * @ind: list to be printed
- * @rcd: arguments list.
- * Return: prc
+ * get_precision - Calculates the precision for printing.
+ * @format: Formatted string in which to print the arguments.
+ * @i: List of arguments to be printed.
+ * @list: List of arguments.
+ *
+ * Return: Precision.
  */
-int _prc_gt(const char *format, int *ind, va_list rcd)
+int get_precision(const char *format, int *i, va_list list)
 {
-	int cui = *ind + 1, prc = -1;
+	int curr_i = *i + 1;
+	int precision = -1;
 
-	if (format[cui] != '.')
-		return (prc);
+	if (format[curr_i] != '.')
+		return (precision);
 
-	prc = 0;
-	for (cui = cui + 1; format[cui] != '\0'; cui++)
+	precision = 0;
+
+	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
 	{
-		if (_is_dgt(format[cui]))
+		if (is_digit(format[curr_i]))
 		{
-			prc = prc * 10;
-			prc += format[cui] - '0';
+			precision *= 10;
+			precision += format[curr_i] - '0';
 		}
-		else if (format[cui] == '*')
+		else if (format[curr_i] == '*')
 		{
-			cui++;
-			prc = va_arg(rcd, int);
+			curr_i++;
+			precision = va_arg(list, int);
 			break;
 		}
 		else
 			break;
 	}
 
-	*ind = cui - 1;
+	*i = curr_i - 1;
 
-	return (prc);
+	return (precision);
 }
+
